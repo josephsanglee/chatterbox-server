@@ -1,3 +1,4 @@
+var fs = require('fs');
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -12,8 +13,14 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 var messages = {
-  results: []
+  results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby'}]
 };
+
+fs.writeFile('./data.json', messages, 'utf8', function(err) {
+  if (err) { return console.log(err); }
+
+  console.log('success');
+});
 
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -33,7 +40,7 @@ var requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
-  var statusCode;
+  var statusCode = 404;
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -41,20 +48,19 @@ var requestHandler = function(request, response) {
   if (request.url === '/classes/messages') {
     if (request.method === 'GET') {
       statusCode = 200;
-
     } else if (request.method === 'POST') {
       statusCode = 201;
+
       request.on('data', function(msg) {
         messages.results.push(JSON.parse(msg));
       });
     }
-
-  } else {
-    statusCode = 404;
   }
 
-
-
+  if (request.method === 'OPTIONS') {
+    response.end(defaultCorsHeaders);
+    return;
+  }
 
 
   // Tell the client we are sending them plain text.
