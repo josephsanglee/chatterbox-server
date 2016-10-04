@@ -1,42 +1,41 @@
+var express = require('express');
 var fs = require('fs');
-/*************************************************************
 
-You should implement your request handler function in this file.
+var defaultCorsHeaders = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'access-control-allow-headers': 'content-type, accept',
+  'access-control-max-age': 10 // Seconds.
+};
 
-requestHandler is already getting passed to http.createServer()
-in basic-server.js, but it won't work as is.
-
-You'll have to figure out a way to export this function from
-this file and include it in basic-server.js so that it actually works.
-
-*Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
-
-**************************************************************/
-var messages = {
+//initial chatterbox welcome statement!
+var initial = {
   results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby'}]
 };
 
-fs.writeFile('./data.json', messages, 'utf8', function(err) {
-  if (err) { return console.log(err); }
+var messages;
 
-  console.log('success');
+//create the file initially if it isn't created already
+fs.open('./data.json', 'r', function (err, data) {
+  if (err) {
+    fs.writeFile('./data.json', JSON.stringify(initial), 'utf8', function(err) {
+      if (err) { return console.log(err); }
+      console.log('success');
+    });
+    return;
+  }
+
+  fs.readFile('./data.json', 'utf8', function(err, data) {
+    if (err) { return console.log(err); }
+    
+    messages = JSON.parse(data);
+  });
 });
 
-var requestHandler = function(request, response) {
-  // Request and Response come from node's http module.
-  //
-  // They include information about both the incoming request, such as
-  // headers and URL, and about the outgoing response, such as its status
-  // and content.
-  //
-  // Documentation for both request and response can be found in the HTTP section at
-  // http://nodejs.org/documentation/api/
 
-  // Do some basic logging.
-  //
-  // Adding more logging to your server can be an easy way to get passive
-  // debugging help, but you should always be careful about leaving stray
-  // console.logs in your code.
+
+
+var requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
@@ -48,12 +47,18 @@ var requestHandler = function(request, response) {
   if (request.url === '/classes/messages') {
     if (request.method === 'GET') {
       statusCode = 200;
+
     } else if (request.method === 'POST') {
       statusCode = 201;
 
       request.on('data', function(msg) {
-        messages.results.push(JSON.parse(msg));
+        messages.results.unshift(JSON.parse(msg));
+        fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
+          if (err) { return console.log(err); }
+          console.log('success');
+        });
       });
+
     }
   }
 
@@ -62,11 +67,6 @@ var requestHandler = function(request, response) {
     return;
   }
 
-
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
   headers['Content-Type'] = 'json';
 
   // .writeHead() writes to the request line and headers of the response,
@@ -80,6 +80,9 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
+
+
+
   response.end(JSON.stringify(messages));
 };
 
@@ -92,11 +95,5 @@ var requestHandler = function(request, response) {
 //
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
-};
 
 exports.requestHandler = requestHandler;
