@@ -8,9 +8,9 @@ var app = express();
 app.use(express.static( __dirname + '/../client'));
 
 /********************************* FILE SYSTEM CODE *******************************/
-// var initial = {
-//   results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby', date: new Date()}]
-// };
+var initial = {
+  results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby', date: new Date()}]
+};
 
 var messages;
 //write the initial file if it doesn't exist yet
