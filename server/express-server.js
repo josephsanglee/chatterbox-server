@@ -1,9 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var path = require('path');
 var http = require('http');
 var port = 3000;
 var app = express();
+
+//redirects the server page to the client page
+app.use(express.static( __dirname + '/../client'));
 
 /********************************* FILE SYSTEM CODE *******************************/
 var initial = {
