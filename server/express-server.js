@@ -51,20 +51,20 @@ app.post('/classes/messages', function(req, res) {
     msg.date = new Date();
     messages.results.unshift(msg);
     
+    // fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
+    //   if (err) { return console.log(err); }
+    //   console.log('success');
+    // });
+  });
+
+  req.on('end', function() {
     fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
       if (err) { return console.log(err); }
       console.log('success');
     });
   });
 
-  // req.on('end', function() {
-  //   fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
-  //     if (err) { return console.log(err); }
-  //     console.log('success');
-  //   });
-  // });
-
-  res.end({});
+  res.end(JSON.stringify({}));
 });
 
 app.listen(process.env.PORT, function() {
