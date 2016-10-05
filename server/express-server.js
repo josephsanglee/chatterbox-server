@@ -22,16 +22,11 @@ fs.open('./data.json', 'r', function (err, data) {
     });
   }
 
-  // fs.readFile('./data.json', 'utf8', function(err, data) {
-  //   if (err) { return console.log(err); }
+  fs.readFile('./data.json', 'utf8', function(err, data) {
+    if (err) { return console.log(err); }
     
-  //   messages = JSON.parse(data);
-  // });
-});
-fs.readFile('./data.json', 'utf8', function(err, data) {
-  if (err) { return console.log(err); }
-  
-  messages = JSON.parse(data);
+    messages = JSON.parse(data);
+  });
 });
 
 /***********************************************************************************/
@@ -56,20 +51,20 @@ app.post('/classes/messages', function(req, res) {
     msg.date = new Date();
     messages.results.unshift(msg);
     
-    // fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
-    //   if (err) { return console.log(err); }
-    //   console.log('success');
-    // });
-  });
-
-  req.on('end', function() {
     fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
       if (err) { return console.log(err); }
       console.log('success');
     });
   });
 
-  res.end(JSON.stringify(messages));
+  // req.on('end', function() {
+  //   fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
+  //     if (err) { return console.log(err); }
+  //     console.log('success');
+  //   });
+  // });
+
+  res.end({});
 });
 
 app.listen(process.env.PORT, function() {
