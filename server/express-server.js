@@ -14,20 +14,20 @@ app.use(express.static( __dirname + '/../client'));
 
 var messages;
 //write the initial file if it doesn't exist yet
-// fs.open('./data.json', 'r', function (err, data) {
-//   if (err) {
-//     fs.writeFile('./data.json', JSON.stringify(initial), 'utf8', function(err) {
-//       if (err) { return console.log(err); }
-//       console.log('success');
-//     });
-//   }
+fs.open('./data.json', 'r', function (err, data) {
+  if (err) {
+    fs.writeFile('./data.json', JSON.stringify(initial), 'utf8', function(err) {
+      if (err) { return console.log(err); }
+      console.log('success');
+    });
+  }
 
-//   fs.readFile('./data.json', 'utf8', function(err, data) {
-//     if (err) { return console.log(err); }
+  // fs.readFile('./data.json', 'utf8', function(err, data) {
+  //   if (err) { return console.log(err); }
     
-//     messages = JSON.parse(data);
-//   });
-// });
+  //   messages = JSON.parse(data);
+  // });
+});
 fs.readFile('./data.json', 'utf8', function(err, data) {
   if (err) { return console.log(err); }
   
