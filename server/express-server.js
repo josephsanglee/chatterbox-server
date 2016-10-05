@@ -2,7 +2,6 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
-var port = 3000;
 var app = express();
 
 //redirects the server page to the client page
@@ -63,6 +62,6 @@ app.post('/classes/messages', function(req, res) {
 
 
 console.log('Listening on ' + port);
-app.listen(3000, function() {
+app.listen(process.env.PORT, function() {
   console.log('we out here');
 });
