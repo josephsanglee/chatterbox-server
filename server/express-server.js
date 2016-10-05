@@ -12,22 +12,22 @@ var initial = {
   results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby', date: new Date()}]
 };
 
-// var messages;
-//write the initial file if it doesn't exist yet
-// fs.open('./data.json', 'r', function (err, data) {
-//   if (err) {
-//     fs.writeFile('./data.json', JSON.stringify(initial), 'utf8', function(err) {
-//       if (err) { return console.log(err); }
-//       console.log('success');
-//     });
-//   }
-
-//   fs.readFile('./data.json', 'utf8', function(err, data) {
-//     if (err) { return console.log(err); }
-    
-//     messages = JSON.parse(data);
-//   });
-// });
+var messages;
+// write the initial file if it doesn't exist yet
+fs.open('./data.json', 'r', function (err, data) {
+  if (err) {
+    fs.writeFile('./data.json', JSON.stringify(initial), 'utf8', function(err) {
+      if (err) { return console.log(err); }
+      console.log('success');
+    });
+  } else {
+    fs.readFile('./data.json', 'utf8', function(err, data) {
+      if (err) { return console.log(err); }
+      
+      messages = JSON.parse(data);
+    });
+  }
+});
 
 /***********************************************************************************/
 
@@ -40,7 +40,7 @@ var defaultCorsHeaders = {
 
 app.get('/classes/messages', function(req, res) {
   res.writeHead(200, defaultCorsHeaders);
-  res.end(JSON.stringify(initial));
+  res.end(JSON.stringify(messages));
 });
 
 app.post('/classes/messages', function(req, res) {
@@ -49,12 +49,12 @@ app.post('/classes/messages', function(req, res) {
   req.on('data', function(msg) { 
     msg = JSON.parse(msg);
     msg.date = new Date();
-    initial.results.unshift(msg);
+    messages.results.unshift(msg);
     
-    // fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
-    //   if (err) { return console.log(err); }
-    //   console.log('success');
-    // });
+    fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
+      if (err) { return console.log(err); }
+      console.log('success');
+    });
   });
 
   // req.on('end', function() {
