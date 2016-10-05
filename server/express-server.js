@@ -49,7 +49,7 @@ app.post('/classes/messages', function(req, res) {
   req.on('data', function(msg) { 
     msg = JSON.parse(msg);
     msg.date = new Date();
-    messages.results.unshift(msg);
+    initial.results.unshift(msg);
     
     // fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
     //   if (err) { return console.log(err); }
