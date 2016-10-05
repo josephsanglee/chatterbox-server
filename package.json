@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node server/express-server.js",
     "start:es6": "babel-node server/express-server.js",
-    // "test": "mocha server/spec",
+    "test": "mocha server/spec",
     "test:es6": "mocha --compilers js:babel-register server/spec",
     "lint": "eslint ./"
   },
