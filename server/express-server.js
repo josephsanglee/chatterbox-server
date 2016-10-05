@@ -60,8 +60,6 @@ app.post('/classes/messages', function(req, res) {
   res.end(JSON.stringify(messages));
 });
 
-
-console.log('Listening on ' + port);
 app.listen(process.env.PORT, function() {
   console.log('we out here');
 });

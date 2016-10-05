@@ -2,7 +2,7 @@ var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'https://hinewri.herokuapp.com//classes/messages',
+  server: 'https://hinewri.herokuapp.com/classes/messages',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
