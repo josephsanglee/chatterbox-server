@@ -11,7 +11,7 @@ app.use(express.static( __dirname + '/../client'));
 
 /********************************* FILE SYSTEM CODE *******************************/
 var initial = {
-  results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby'}]
+  results: [{username: 'chatterbot', text: 'Welcome!', roomname: 'lobby', date: new Date()}]
 };
 
 var messages;
@@ -50,6 +50,7 @@ app.post('/classes/messages', function(req, res) {
 
   req.on('data', function(msg) { 
     msg = JSON.parse(msg);
+    msg.date = new Date();
     messages.results.unshift(msg);
     
     fs.writeFile('./data.json', JSON.stringify(messages), 'utf8', function(err) {
